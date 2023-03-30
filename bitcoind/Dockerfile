@@ -1,5 +1,7 @@
 FROM debian:stable-slim
 
+ARG BITCOINDVERSION
+
 ENV FILENAME bitcoin-${BITCOINDVERSION}-x86_64-linux-gnu.tar.gz
 ENV DOWNLOAD_URL https://bitcoincore.org/bin/bitcoin-core-${BITCOINDVERSION}/${FILENAME}
 

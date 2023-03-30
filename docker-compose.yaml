@@ -7,8 +7,8 @@ services:
     restart: always
     build: 
       context: ./bitcoind
-    env_file:
-      - .env
+      args:
+        BITCOINDVERSION: "${BITCOINDVERSION}"
     expose: 
       - "${BITCOINDRPCPORT}"
       - "28332"
@@ -26,6 +26,10 @@ services:
     restart: always
     build: 
       context: ./lit
+      args:
+        LITVERSION: "${LITVERSION}"
+        INITVERSION: "${INITVERSION}"
+        NETWORK: "${NETWORK}"
     env_file:
       - .env
     expose: 
@@ -44,18 +48,26 @@ services:
     restart: always
     build: 
       context: ./backup 
+      args:
+        NETWORK: "${NETWORK}"
+        S3URL: "${S3URL}"
+        S3BUCKETNAME: "${S3BUCKETNAME}"
+        S3ACCESSKEY: "${S3ACCESSKEY}"
+        S3SECRETKEY: "${S3SECRETKEY}"
     env_file:
       - .env
     volumes: 
       - ../.lnd:/root/.lnd
     profiles:
-      - donotstart
+      - donotstart       
 
   rtl: 
     container_name: rtl
     restart: always
     build: 
       context: ./rtl 
+      args:
+        RTLVERSION: "${RTLVERSION}"
     env_file:
       - .env
     ports: 

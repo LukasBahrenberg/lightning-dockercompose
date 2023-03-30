@@ -29,9 +29,8 @@ nodeurl = network + '-' + nodenumber + '.' + domain
 
 bitcoindrpcport = os.getenv('BITCOINDRPCPORT')
 litrpcport = os.getenv('LITRPCPORT')
-rtlport = os.getenv('RTLPORT')
-thunderhubport = os.getenv('THPORT')
-lnbitsport = os.getenv('LNBITSPORT')
+rtlrpcport = os.getenv('RTLRPCPORT')
+thrpcport = os.getenv('THRPCPORT')
 
 s3backup = os.getenv('S3BACKUP')
 
@@ -103,7 +102,7 @@ with open('/home/{}/lightning-dockercompose/lit/Dockerfile'.format(user), 'w') a
 ## rtl conf
 with open('/home/{}/lightning-dockercompose/rtl/RTL-Config.json'.format(user), 'r') as file: # Read in the file
   filedata = file.read()
-filedata = filedata.replace('_RTLPORT_', rtlport) # Replace the target string
+filedata = filedata.replace('_RTLPORT_', rtlrpcport) # Replace the target string
 filedata = filedata.replace('_NETWORK_', network) # Replace the target string
 filedata = filedata.replace('_PWD_', password) # Replace the target string
 with open('/home/{}/lightning-dockercompose/rtl/RTL-Config.json'.format(user), 'w') as file: # Write the file out again
@@ -117,8 +116,17 @@ filedata = filedata.replace('_NETWORK_', network) # Replace the target string
 with open('/home/{}/lightning-dockercompose/thunderhub/config.yaml'.format(user), 'w') as file: # Write the file out again
   file.write(filedata)
 
+## thunderhub .env
+with open('/home/{}/lightning-dockercompose/thunderhub/.env'.format(user), 'r') as file: # Read in the file
+  filedata = file.read()
+filedata = filedata.replace('_THRPCPORT_', thrpcport) # Replace the target string
+filedata = filedata.replace('_NETWORK_', network) # Replace the target string
+filedata = filedata.replace('_URL_', nodeurl) # Replace the target string
+with open('/home/{}/lightning-dockercompose/thunderhub/.env'.format(user), 'w') as file: # Write the file out again
+  file.write(filedata)
+
 ## use backup service
-if s3backup='true': 
+if s3backup=='true': 
   with open('/home/{}/lightning-dockercompose/docker-compose.yaml'.format(user), 'r') as file: # Read in the file
     filedata = file.read()
   filedata = filedata.replace('profiles:', '# profiles:') # Replace the target string

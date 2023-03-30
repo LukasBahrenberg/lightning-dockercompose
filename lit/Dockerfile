@@ -1,5 +1,9 @@
 FROM debian:stable-slim
 
+ARG LITVERSION
+ARG INITVERSION
+ARG NETWORK
+
 # LIT
 ENV FILENAME lightning-terminal-linux-amd64-v${LITVERSION}
 ENV FILE ${FILENAME}.tar.gz

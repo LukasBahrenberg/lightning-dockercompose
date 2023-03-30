@@ -1,5 +1,11 @@
 FROM debian:stable-slim
-  
+
+ARG NETWORK
+ARG S3URL
+ARG S3BUCKETNAME
+ARG S3ACCESSKEY
+ARG S3SECRETKEY
+
 # install wget
 RUN apt update \
   && apt -y install wget unzip inotify-tools
@@ -15,5 +21,5 @@ RUN apt-get remove -y wget unzip
 RUN ((printf "%s\n" "${S3ACCESSKEY}" "${S3SECRETKEY}" "" "") && cat) | aws configure --profile eu2 
 
 CMD while true; do inotifywait /root/.lnd/data/chain/bitcoin/${NETWORK}/channel.backup \ 
-  && aws --profile eu2 --endpoint-url ${S3URL} s3 cp /root/.lnd/data/chain/bitcoin/${NETWORK}/channel.backup s3://${BUCKETNAME}/channel.backup; \
+  && aws --profile eu2 --endpoint-url ${S3URL} s3 cp /root/.lnd/data/chain/bitcoin/${NETWORK}/channel.backup s3://${S3BUCKETNAME}/channel.backup; \
   done
