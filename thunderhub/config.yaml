@@ -1,0 +1,7 @@
+masterPassword: _PWD_
+defaultNetwork: _NETWORK_
+accounts:
+  - name: "donex"
+    serverUrl: "lit:10009"
+    macaroonPath: "/lnd/data/chain/bitcoin/_NETWORK_/admin.macaroon"
+    certificatePath: "/lnd/tls.cert"

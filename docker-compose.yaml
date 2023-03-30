@@ -1,0 +1,92 @@
+version: '3.8'
+
+services: 
+
+  bitcoind:
+    container_name: bitcoind
+    restart: always
+    build: 
+      context: ./bitcoind
+    env_file:
+      - .env
+    expose: 
+      - "${BITCOINDRPCPORT}"
+      - "28332"
+      - "28333"
+    ports:
+      - "8333:8333" # mainnet
+      - "18333:18333" # testnet
+      - "38333:38333" # signet
+    volumes: 
+      - ../.bitcoin:/root/.bitcoin
+      - ./bitcoind/bitcoin.conf:/root/.bitcoin/bitcoin.conf
+
+  lit: 
+    container_name: lit
+    restart: always
+    build: 
+      context: ./lit
+    env_file:
+      - .env
+    expose: 
+      - "${LITRPCPORT}"
+      - "10009"
+    ports: 
+      - "9735:9735" # lightning peers
+      - "80:80" # lit mailbox
+    volumes: 
+      - ../.lnd:/root/.lnd
+      - ../.lit:/root/.lit
+      - ./lit/lit.conf:/root/.lit/lit.conf
+
+  backup: 
+    container_name: backup
+    restart: always
+    build: 
+      context: ./backup 
+    env_file:
+      - .env
+    volumes: 
+      - ../.lnd:/root/.lnd
+    profiles:
+      - donotstart
+
+  rtl: 
+    container_name: rtl
+    restart: always
+    build: 
+      context: ./rtl 
+    env_file:
+      - .env
+    ports: 
+      - "${RTLRPCPORT}:${RTLRPCPORT}"
+    volumes: 
+      - ./rtl/RTL-Config.json:/root/RTL/RTL-Config.json
+      - ../.lnd:/root/.lnd
+      - ../.bitcoin:/root/.bitcoin
+
+  thunderhub: 
+    container_name: thunderhub
+    restart: always
+    build: 
+      context: ./thunderhub 
+    env_file:
+      - .env
+    ports: 
+      - "${THRPCPORT}:${THRPCPORT}"
+    volumes: 
+      - ./thunderhub/.env:/root/thunderhub/.env
+      - ./thunderhub/config.yaml:/root/thunderhub/config.yaml
+      - ../.lnd:/lnd
+
+  tor:
+    container_name: tor
+    restart: always
+    build: 
+      context: ./tor
+    expose:
+      - "9051"
+      - "9050"
+    volumes:
+      - ../.tor:/var/lib/tor
+      - ./tor/torrc:/etc/tor/torrc

@@ -1,0 +1,37 @@
+{
+  "multiPass": "_PWD_",
+  "port": "_RTLPORT_",
+  "defaultNodeIndex": 1,
+  "SSO": {
+    "rtlSSO": 0,
+    "rtlCookiePath": "",
+    "logoutRedirectLink": ""
+  },
+  "nodes": [
+    {
+      "index": 1,
+      "lnNode": "LND _NETWORK_",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/root/.lnd/data/chain/bitcoin/_NETWORK_",
+        "swapMacaroonPath": "<Complete path of the folder containing Loop's loop.macaroon for the node>",
+        "boltzMacaroonPath": "<Complete path of the folder containing Boltz admin.macaroon for the node>",
+        "configPath": "/root/.lnd/lnd.conf",
+        "lnApiPassword": "<Optional:Can be used to provide password in ECL implementation>"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "NIGHT",
+        "themeColor": "PURPLE",
+        "channelBackupPath": "/root/.lnd/data/chain/bitcoin/_NETWORK_",
+        "bitcoindConfigPath": "/root/.bitcoin/bitcoin.conf",
+        "logLevel": "INFO",
+        "fiatConversion": false,
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://lit:8080",
+        "swapServerUrl": "<url for swap server REST APIs for the node. e.g. https://localhost:8081>",
+        "boltzServerUrl": "<url for boltz server REST APIs for the node. e.g. https://localhost:9003>"
+      }
+    }
+  ]
+}
