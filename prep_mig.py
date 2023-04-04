@@ -34,4 +34,8 @@ subprocess.run('((printf \"%s\n\" \"{}\" \"{}\" \"\" \"\") && cat) | sudo aws co
 # create backups
 subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 sync /home/{}/.lnd s3://{}/.lnd'.format(s3url, user, s3bucketname), shell=True)
 subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 sync /home/{}/.lit s3://{}/.lit'.format(s3url, user, s3bucketname), shell=True)
-subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 cp /home/{}/lightning-dockercompose/.env s3://{}/lightning-dockercompose/.env'.format(s3url, user, s3bucketname), shell=True)
+
+# remove
+subprocess.run('sudo rm -rf ./aws', shell=True)
+subprocess.run('sudo rm -rf ./awscliv2.zip', shell=True)
+subprocess.run('sudo rm -rf /root/.aws', shell=True)

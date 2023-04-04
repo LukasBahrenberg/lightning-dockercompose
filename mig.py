@@ -1,12 +1,4 @@
-# This script is designed to be run as root from a brand new Linux installation 
-# As root user, commands would not need to be run as sudo. This makes it testable, however, for non-root users and still works for the root user.
-
 import subprocess
-import base64
-import re
-import time
-import json
-from pprint import pprint
 import os
 from dotenv import load_dotenv
 import getpass
@@ -22,21 +14,9 @@ s3accesskey = os.getenv('S3ACCESSKEY')
 s3secretkey = os.getenv('S3SECRETKEY')
 s3url = os.getenv('S3URL')
 s3bucketname = os.getenv('S3BUCKETNAME')
+s3migbucketname = os.getenv('S3MIGBUCKETNAME')
+s3backup = os.getenv('S3BACKUP')
 
-# install aws cli tool
-subprocess.run('wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip', shell=True)
-subprocess.run('unzip awscliv2.zip && sudo ./aws/install --update', shell=True)
-subprocess.run('((printf \"%s\n\" \"{}\" \"{}\" \"\" \"\") && cat) | sudo aws configure --profile eu2'.format(s3accesskey, s3secretkey), shell=True)
-
-# load data from S3 bucket
-subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 sync s3://{}/.lnd /home/{}/.lnd'.format(s3url, user, s3bucketname), shell=True)
-subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 sync s3://{}/.lit /home/{}/.lit'.format(s3url, user, s3bucketname), shell=True)
-subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 cp s3://{}/lightning-dockercompose/.env /home/{}/lightning-dockercompose/.env'.format(s3url, user, s3bucketname), shell=True)
-
-# load environment variables
-load_dotenv()
-
-# assign env variables & co
 bitcoindversion = os.getenv('BITCOINDVERSION')
 litversion = os.getenv('LITVERSION')
 initversion = os.getenv('INITVERSION')
@@ -53,7 +33,20 @@ litrpcport = os.getenv('LITRPCPORT')
 rtlrpcport = os.getenv('RTLRPCPORT')
 thrpcport = os.getenv('THRPCPORT')
 
-s3backup = os.getenv('S3BACKUP')
+# install aws cli tool
+subprocess.run('wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip', shell=True)
+subprocess.run('unzip awscliv2.zip && sudo ./aws/install --update', shell=True)
+subprocess.run('printf \"%s\\n\" \"{}\" \"{}\" \"\" \"\" | sudo aws configure --profile eu2'.format(s3accesskey, s3secretkey), shell=True)
+
+# load data from S3 bucket
+subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 sync s3://{}/.lnd/ /home/{}/.lnd'.format(s3url, s3migbucketname, user), shell=True)
+subprocess.run('sudo aws --profile eu2 --endpoint-url {} s3 sync s3://{}/.lit/ /home/{}/.lit'.format(s3url, s3migbucketname, user), shell=True)
+
+# remove
+subprocess.run('sudo rm -rf ./aws', shell=True)
+subprocess.run('sudo rm -rf ./awscliv2.zip', shell=True)
+subprocess.run('sudo rm -rf /root/.aws', shell=True)
+subprocess.run('sudo rm -rf /os.py', shell=True)
 
 # get public ip
 ip = get('https://api.ipify.org').content.decode('utf8')
