@@ -1,0 +1,8 @@
+# docker related commands
+sudo docker compose logs --follow lnd
+sudo docker compose ps
+sudo docker compose down && sudo docker compose up -d --build
+
+sudo docker exec -it rtl sh
+sudo docker stop lndconnect && sudo docker rm lndconnect
+sudo docker compose up -d --build lnd
