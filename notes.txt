@@ -6,3 +6,5 @@ sudo docker compose down && sudo docker compose up -d --build
 sudo docker exec -it rtl sh
 sudo docker stop lndconnect && sudo docker rm lndconnect
 sudo docker compose up -d --build lnd
+
+sudo rm -rf ../.lnd/tls.cert && sudo rm -rf ../.lnd/tls.key && sudo rm -rf ../.lit/tls.cert && sudo rm -rf ../.lit/tls.key && sudo rm -rf ../.lit/tls.key && sudo rm -rf ../.lit/letsencrypt
