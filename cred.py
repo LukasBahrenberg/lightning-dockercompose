@@ -49,4 +49,4 @@ subprocess_result = subprocess.run('sudo xxd -p -c2000 /home/{}/.lnd/data/chain/
 admin_macaroon = subprocess_result.stdout.strip()
 
 # create lit LNC session
-subprocess_result = subprocess.run('sudo docker exec lit litcli --network {} --tlscertpath /root/.lnd/tls.cert sessions add --label="default" --type=admin'.format(network), shell=True)
+subprocess_result = subprocess.run('sudo docker exec lit litcli --network {} --tlscertpath /root/.lit/tls.cert sessions add --label="default" --type=admin'.format(network), shell=True)
